@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        SONARQUBE = 'MySonarQube'  // Replace with the actual name in Jenkins > Configure System
+        DOCKER_IMAGE = 'myapp:latest'
+    }
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git 'https://github.com/your-username/your-repo-name.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${env.SONARQUBE}") {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${DOCKER_IMAGE} .'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline executed successfully!'
+        }
+        failure {
+            echo '❌ Pipeline failed.'
+        }
+    }
+}
