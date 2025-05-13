@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        SONARQUBE = 'jenkins-token' 
+        SONARQUBE = 'SonarQube' 
     }
 
     stages {
