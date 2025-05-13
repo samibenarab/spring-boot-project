@@ -2,18 +2,18 @@ pipeline {
     agent any
 
     tools {
-        maven 'M1'       
-        jdk 'jdk17'            
+        maven 'M1'        // Assure-toi que ce nom est bien celui configuré dans Jenkins
+        jdk 'jdk17'       // Idem pour le JDK
     }
 
     environment {
-        SONARQUBE = 'SonarQubeServer'  
+        SONARQUBE = 'SonarQubeServer' // Nom configuré dans "Manage Jenkins" > Global Tool Configuration
     }
 
     stages {
         stage('Cloner le projet') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/samibenarab/spring-boot-project'
+                git credentialsId: 'github-token', url: 'https://github.com/samibenarab/spring-boot-project.git', branch: 'main'
             }
         }
 
@@ -40,10 +40,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline terminé avec succès'
+            echo '✅ Pipeline terminé avec succès'
         }
         failure {
-            echo 'Une erreur est survenue'
+            echo '❌ Une erreur est survenue'
         }
     }
 }
